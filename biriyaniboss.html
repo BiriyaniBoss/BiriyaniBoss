@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BiriyaniBAoss – Authentic Biryani in the Netherlands</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ══════════════════════════════════════════
+   RESET & ROOT
+══════════════════════════════════════════ */
+:root {
+  --saffron:#E8871A; --saffron-light:#F7C47A; --saffron-dark:#B56410;
+  --deep:#1A0A00; --cream:#FDF6EC; --cream2:#FBF0DC;
+  --text:#2C1A06; --muted:#7A5C3A; --border:rgba(232,135,26,.2);
+  --white:#FFFFFF; --success:#2D7A4F;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);overflow-x:hidden}
+
+/* ══════════════════════════════════════════
+   NAV
+══════════════════════════════════════════ */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:1000;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:1rem 3rem;
+  background:rgba(26,10,0,.97);backdrop-filter:blur(12px);
+  border-bottom:1px solid rgba(232,135,26,.3);
+}
+.logo{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:900;color:var(--saffron);text-decoration:none;cursor:pointer}
+.logo span{color:#FDF6EC;font-style:italic}
+.nav-links{display:flex;gap:1.8rem;list-style:none;align-items:center}
+.nav-links a{color:rgba(253,246,236,.8);text-decoration:none;font-size:.9rem;font-weight:500;letter-spacing:.4px;transition:color .2s;cursor:pointer}
+.nav-links a:hover,.nav-links a.active{color:var(--saffron)}
+.nav-cta{background:var(--saffron)!important;color:var(--deep)!important;padding:.45rem 1.3rem;border-radius:50px;font-weight:600!important}
+.nav-cta:hover{background:var(--saffron-light)!important}
+.hamburger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:4px}
+.hamburger span{display:block;width:24px;height:2px;background:var(--cream);border-radius:2px;transition:all .3s}
+
+/* ══════════════════════════════════════════
+   PAGE ROUTING
+══════════════════════════════════════════ */
+.page{display:none;min-height:100vh;padding-top:72px}
+.page.active{display:block}
+/* home has no top padding — hero fills full screen */
+#page-home{padding-top:0}
+
+/* ══════════════════════════════════════════
+   SHARED COMPONENTS
+══════════════════════════════════════════ */
+.page-hero{background:linear-gradient(135deg,#1A0A00,#3D1900);padding:5rem 3rem 4rem;text-align:center}
+.page-hero h1{font-family:'Playfair Display',serif;font-size:clamp(2rem,5vw,3rem);color:var(--cream);font-weight:700}
+.page-hero p{color:rgba(253,246,236,.6);margin-top:.5rem;font-size:1rem}
+.page-content{padding:4rem 3rem;max-width:1200px;margin:0 auto}
+.section-label{font-size:.75rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--saffron);margin-bottom:.5rem}
+.section-head{text-align:center;margin-bottom:3rem}
+.section-head h2{font-family:'Playfair Display',serif;font-size:2.2rem;color:var(--text);margin-bottom:.4rem}
+.section-head p{color:var(--muted)}
+
+.btn-primary{background:var(--saffron);color:var(--deep);border:none;padding:.85rem 2rem;border-radius:50px;font-size:.95rem;font-weight:600;cursor:pointer;transition:all .2s;font-family:'DM Sans',sans-serif;display:inline-block;text-decoration:none}
+.btn-primary:hover{background:var(--saffron-light);transform:translateY(-2px)}
+.btn-outline{background:transparent;color:var(--text);border:1.5px solid var(--border);padding:.85rem 2rem;border-radius:50px;font-size:.95rem;font-weight:500;cursor:pointer;transition:all .2s;font-family:'DM Sans',sans-serif}
+.btn-outline:hover{border-color:var(--saffron);color:var(--saffron)}
+.btn-dark{background:transparent;color:var(--cream);border:1.5px solid rgba(253,246,236,.3);padding:.85rem 2rem;border-radius:50px;font-size:.95rem;font-weight:500;cursor:pointer;transition:all .2s;font-family:'DM Sans',sans-serif;text-decoration:none;display:inline-block}
+.btn-dark:hover{border-color:var(--saffron);color:var(--saffron)}
+.price{font-weight:700;color:var(--saffron-dark);font-size:1.1rem}
+.add-btn{background:var(--saffron);border:none;color:var(--deep);width:34px;height:34px;border-radius:50%;font-size:1.2rem;font-weight:700;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;font-family:'DM Sans',sans-serif;flex-shrink:0}
+.add-btn:hover{background:var(--saffron-dark);color:white;transform:scale(1.1)}
+.badge-spice{display:inline-block;padding:.18rem .5rem;border-radius:4px;font-size:.68rem;font-weight:600;margin-top:.3rem}
+.mild{background:#E8F5E9;color:#2D7A4F}
+.medium{background:#FFF3E0;color:#B56410}
+.hot{background:#FFEBEE;color:#C62828}
+
+/* ══════════════════════════════════════════
+   HOME PAGE
+══════════════════════════════════════════ */
+.hero{min-height:100vh;background:linear-gradient(135deg,#1A0A00 0%,#2C1200 55%,#1A0A00 100%);position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:8rem 2rem 4rem;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 20% 50%,rgba(232,135,26,.13) 0%,transparent 50%),radial-gradient(circle at 80% 30%,rgba(232,135,26,.08) 0%,transparent 40%);pointer-events:none}
+.hero-badge{display:inline-block;background:rgba(232,135,26,.15);border:1px solid rgba(232,135,26,.4);color:var(--saffron-light);font-size:.78rem;font-weight:600;letter-spacing:2px;text-transform:uppercase;padding:.4rem 1.2rem;border-radius:50px;margin-bottom:1.5rem;animation:fadeUp .6s ease both}
+.hero-title{font-family:'Playfair Display',serif;font-size:clamp(3rem,8vw,6rem);font-weight:900;color:var(--cream);line-height:1.05;margin-bottom:1rem;animation:fadeUp .7s .1s ease both}
+.hero-title .accent{color:var(--saffron)}
+.hero-sub{font-size:1.1rem;color:rgba(253,246,236,.65);max-width:520px;line-height:1.7;margin:0 auto 2.5rem;animation:fadeUp .7s .2s ease both}
+.hero-btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;animation:fadeUp .7s .3s ease both}
+.hero-stats{display:flex;gap:3rem;margin-top:4rem;padding-top:3rem;border-top:1px solid rgba(232,135,26,.2);animation:fadeUp .7s .4s ease both;flex-wrap:wrap;justify-content:center}
+.stat{text-align:center}
+.stat-num{font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;color:var(--saffron)}
+.stat-label{font-size:.78rem;color:rgba(253,246,236,.5);letter-spacing:1px;text-transform:uppercase}
+
+.features-strip{background:var(--cream);padding:5rem 3rem}
+.feat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1.5rem}
+.feat-card{background:var(--white);border:1px solid var(--border);border-radius:20px;padding:1.75rem 1.25rem;text-align:center;transition:transform .2s,box-shadow .2s}
+.feat-card:hover{transform:translateY(-4px);box-shadow:0 12px 40px rgba(232,135,26,.1)}
+.feat-icon{font-size:2.2rem;margin-bottom:.75rem}
+.feat-card h3{font-size:.95rem;font-weight:600;color:var(--text);margin-bottom:.35rem}
+.feat-card p{font-size:.8rem;color:var(--muted);line-height:1.6}
+
+.popular-strip{background:var(--cream2);padding:5rem 3rem}
+.pop-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:1.5rem;margin-bottom:2.5rem}
+.pop-card{background:var(--white);border-radius:20px;overflow:hidden;border:1px solid var(--border);transition:transform .2s}
+.pop-card:hover{transform:translateY(-4px)}
+.pop-img{height:130px;display:flex;align-items:center;justify-content:center;font-size:3.5rem;background:linear-gradient(135deg,#FDF6EC,#F7E0C0)}
+.pop-body{padding:1.2rem}
+.pop-body h3{font-weight:600;font-size:.97rem;color:var(--text)}
+.pop-body p{color:var(--muted);font-size:.8rem;margin-top:.25rem;line-height:1.5}
+.pop-footer{display:flex;align-items:center;justify-content:space-between;margin-top:1rem;padding-top:.75rem;border-top:1px solid var(--border)}
+
+.testi-strip{background:var(--cream);padding:5rem 3rem}
+.testi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:1.5rem}
+.testi-card{background:var(--white);border:1px solid var(--border);border-radius:20px;padding:1.75rem}
+.stars{color:var(--saffron);margin-bottom:.75rem}
+.testi-card blockquote{font-size:.88rem;color:var(--text);line-height:1.7;font-style:italic;margin-bottom:1rem}
+.testi-meta{display:flex;align-items:center;gap:.75rem}
+.testi-av{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#E8871A,#F7C47A);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem;color:var(--deep);flex-shrink:0}
+.testi-name{font-weight:600;font-size:.85rem}
+.testi-city{font-size:.75rem;color:var(--muted)}
+
+.cta-band{background:linear-gradient(135deg,#1A0A00,#3D1900);padding:5rem 3rem;text-align:center}
+.cta-band h2{font-family:'Playfair Display',serif;font-size:2.5rem;color:var(--cream);margin-bottom:.75rem}
+.cta-band p{color:rgba(253,246,236,.6);margin-bottom:2rem}
+.cta-btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
+
+/* ══════════════════════════════════════════
+   ABOUT PAGE
+══════════════════════════════════════════ */
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;margin-bottom:4rem}
+.about-visual{background:linear-gradient(135deg,#3D1900,#5C2600);border-radius:24px;padding:3rem;text-align:center;position:relative;overflow:hidden}
+.about-visual::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(circle at center,rgba(232,135,26,.1),transparent 60%)}
+.about-emoji{font-size:6rem;display:block;margin-bottom:1rem}
+.about-visual h3{font-family:'Playfair Display',serif;color:var(--saffron);font-size:1.5rem}
+.about-visual p{color:rgba(253,246,236,.6);font-size:.88rem;margin-top:.5rem}
+.about-text h2{font-family:'Playfair Display',serif;font-size:2.2rem;color:var(--text);line-height:1.2;margin-bottom:1.2rem}
+.about-text h2 span{color:var(--saffron)}
+.about-text p{color:var(--muted);line-height:1.8;margin-bottom:1rem;font-size:.95rem}
+.vals-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1.5rem}
+.val-card{background:var(--white);border:1px solid var(--border);border-radius:16px;padding:1.5rem;text-align:center}
+.val-icon{font-size:2rem;margin-bottom:.6rem}
+.val-card h4{font-weight:600;font-size:.95rem;margin-bottom:.3rem}
+.val-card p{color:var(--muted);font-size:.8rem;line-height:1.6}
+.team-strip{background:var(--cream2);padding:5rem 3rem}
+.team-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:2rem}
+.team-card{text-align:center}
+.team-av{width:90px;height:90px;border-radius:50%;background:linear-gradient(135deg,#3D1900,#E8871A);display:flex;align-items:center;justify-content:center;font-size:2.2rem;margin:0 auto 1rem}
+.team-card h3{font-weight:600;font-size:.97rem}
+.team-card p{color:var(--muted);font-size:.8rem;margin-top:.3rem;line-height:1.5}
+.tl-wrap{max-width:750px;margin:0 auto}
+.tl-list{position:relative;padding-left:2rem;border-left:2px solid var(--border);display:flex;flex-direction:column;gap:2rem}
+.tl-item{position:relative}
+.tl-dot{position:absolute;left:-2.6rem;top:.3rem;width:18px;height:18px;border-radius:50%;background:var(--saffron);border:3px solid var(--cream)}
+.tl-year{font-size:.72rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--saffron);margin-bottom:.3rem}
+.tl-item h4{font-weight:600;font-size:.97rem;margin-bottom:.3rem}
+.tl-item p{color:var(--muted);font-size:.87rem;line-height:1.6}
+
+/* ══════════════════════════════════════════
+   MENU PAGE
+══════════════════════════════════════════ */
+.cat-bar{display:flex;gap:.75rem;flex-wrap:wrap;margin-bottom:2rem}
+.cat-btn{padding:.45rem 1.2rem;border-radius:50px;border:1.5px solid var(--border);background:transparent;color:var(--muted);font-size:.85rem;font-weight:500;cursor:pointer;transition:all .2s;font-family:'DM Sans',sans-serif}
+.cat-btn.active,.cat-btn:hover{background:var(--saffron);border-color:var(--saffron);color:var(--deep)}
+.menu-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:1.5rem}
+.menu-card{background:var(--white);border:1px solid var(--border);border-radius:20px;overflow:hidden;transition:transform .2s,box-shadow .2s}
+.menu-card:hover{transform:translateY(-4px);box-shadow:0 12px 40px rgba(232,135,26,.12)}
+.menu-img{height:150px;display:flex;align-items:center;justify-content:center;font-size:3.8rem;background:linear-gradient(135deg,#FBF0DC,#F7E0C0)}
+.menu-body{padding:1.2rem}
+.menu-body h3{font-size:.97rem;font-weight:600;color:var(--text)}
+.menu-body p{color:var(--muted);font-size:.8rem;line-height:1.5;margin-top:.25rem}
+.menu-footer{display:flex;align-items:center;justify-content:space-between;margin-top:1rem;padding-top:.75rem;border-top:1px solid var(--border)}
+
+/* ══════════════════════════════════════════
+   WEEKLY PAGE
+══════════════════════════════════════════ */
+.week-picker{display:grid;grid-template-columns:repeat(7,1fr);gap:.7rem;margin-bottom:2.5rem}
+.day-card{background:var(--white);border:1.5px solid var(--border);border-radius:14px;padding:.8rem .4rem;text-align:center;cursor:pointer;transition:all .2s;position:relative}
+.day-card:hover{border-color:var(--saffron)}
+.day-card.sel{background:var(--saffron);border-color:var(--saffron)}
+.day-card.sun-card{border-color:rgba(232,135,26,.5)}
+.day-lbl{font-size:.68rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--muted)}
+.day-card.sel .day-lbl{color:rgba(26,10,0,.7)}
+.day-num{font-size:1.4rem;font-weight:700;color:var(--text);margin:.2rem 0}
+.day-card.sel .day-num{color:var(--deep)}
+.day-tag{font-size:.62rem;color:var(--saffron);font-weight:600}
+.day-card.sel .day-tag{color:var(--deep)}
+.sun-badge{position:absolute;top:-8px;right:-8px;background:var(--saffron);color:var(--deep);font-size:.58rem;font-weight:700;padding:.18rem .45rem;border-radius:50px}
+.day-card.sel .sun-badge{background:var(--deep);color:var(--saffron)}
+.daily-box{background:var(--white);border:1px solid var(--border);border-radius:20px;padding:2rem}
+.daily-head{display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:1px solid var(--border)}
+.daily-icon{font-size:2rem}
+.daily-head h3{font-family:'Playfair Display',serif;font-size:1.4rem;color:var(--text)}
+.daily-head p{color:var(--muted);font-size:.83rem}
+.sun-banner{background:linear-gradient(135deg,#3D1900,#5C2600);border-radius:14px;padding:1.4rem;margin-bottom:1.5rem;display:flex;align-items:center;gap:1rem}
+.sun-banner h4{color:var(--saffron);font-family:'Playfair Display',serif;font-size:1.1rem}
+.sun-banner p{color:rgba(253,246,236,.7);font-size:.82rem;margin-top:.2rem}
+.daily-items{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:1rem}
+.daily-item{border:1px solid var(--border);border-radius:12px;padding:1rem;display:flex;flex-direction:column;gap:.35rem;transition:border-color .2s}
+.daily-item.picked{border-color:var(--saffron);background:rgba(232,135,26,.05)}
+.daily-item h4{font-weight:600;font-size:.9rem}
+.daily-item p{color:var(--muted);font-size:.77rem;line-height:1.4;flex:1}
+.item-row{display:flex;align-items:center;justify-content:space-between;margin-top:auto}
+
+/* ══════════════════════════════════════════
+   PARTY PAGE
+══════════════════════════════════════════ */
+.party-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1.5rem}
+.tier-card{border-radius:24px;padding:2rem;position:relative;overflow:hidden;border:2px solid transparent;transition:transform .2s,box-shadow .2s}
+.tier-card:hover{transform:translateY(-5px);box-shadow:0 16px 50px rgba(0,0,0,.12)}
+.tier-card.sel-tier{border-color:var(--saffron)!important}
+.t-bronze{background:linear-gradient(135deg,#FDF6EC,#FAECD8);border:1px solid rgba(205,127,50,.3)}
+.t-silver{background:linear-gradient(135deg,#F5F5F7,#E8E8EA);border:1px solid rgba(168,169,173,.4)}
+.t-gold{background:linear-gradient(135deg,#FFFBEC,#FFF3C4);border:1px solid rgba(255,215,0,.4)}
+.t-platinum{background:linear-gradient(135deg,#F0F0F2,#E0E0E5);border:1px solid rgba(200,200,210,.4)}
+.tier-ico{width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.5rem;margin-bottom:1.2rem}
+.t-bronze .tier-ico{background:rgba(205,127,50,.2)}
+.t-silver .tier-ico{background:rgba(168,169,173,.25)}
+.t-gold .tier-ico{background:rgba(255,215,0,.25)}
+.t-platinum .tier-ico{background:rgba(200,200,210,.3)}
+.tier-name{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700}
+.t-bronze .tier-name{color:#7B4A10}
+.t-silver .tier-name{color:#5A5A5A}
+.t-gold .tier-name{color:#7A6000}
+.t-platinum .tier-name{color:#4A4A5A}
+.tier-price{font-size:1.8rem;font-weight:700;margin:.5rem 0}
+.t-bronze .tier-price{color:#CD7F32}
+.t-silver .tier-price{color:#777}
+.t-gold .tier-price{color:#B8860B}
+.t-platinum .tier-price{color:#6A6A7A}
+.tier-desc{font-size:.8rem;color:var(--muted);margin-bottom:1rem;line-height:1.5}
+.tier-feats{list-style:none}
+.tier-feats li{font-size:.82rem;color:var(--text);padding:.3rem 0;border-bottom:1px solid rgba(0,0,0,.06);display:flex;align-items:flex-start;gap:.5rem}
+.tier-feats li:last-child{border-bottom:none}
+.tier-feats li::before{content:'✓';color:var(--success);font-weight:700;font-size:.85rem;flex-shrink:0;margin-top:.05rem}
+.tier-btn{width:100%;margin-top:1.5rem;border-radius:12px;padding:.9rem;background:var(--saffron);color:var(--deep);border:none;font-weight:600;font-size:.9rem;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s}
+.tier-btn:hover{background:var(--saffron-dark);color:white}
+
+/* ══════════════════════════════════════════
+   CART BAR & MODAL
+══════════════════════════════════════════ */
+.cart-bar{position:fixed;bottom:1.5rem;right:1.5rem;background:var(--deep);color:var(--cream);border:1px solid rgba(232,135,26,.3);border-radius:50px;padding:.8rem 1.5rem;display:flex;align-items:center;gap:1rem;cursor:pointer;z-index:999;transition:all .2s;box-shadow:0 8px 32px rgba(0,0,0,.3);font-family:'DM Sans',sans-serif}
+.cart-bar:hover{background:#2C1200;transform:translateY(-2px)}
+.cart-bar.hidden{display:none}
+.cart-count{background:var(--saffron);color:var(--deep);width:24px;height:24px;border-radius:50%;font-size:.8rem;font-weight:700;display:flex;align-items:center;justify-content:center}
+.cart-total{font-weight:600;font-size:.9rem;color:var(--saffron)}
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:2000;align-items:center;justify-content:center;padding:2rem}
+.modal-overlay.open{display:flex}
+.modal{background:var(--white);border-radius:24px;width:100%;max-width:560px;max-height:90vh;overflow-y:auto;padding:2rem}
+.modal-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:1px solid var(--border)}
+.modal-hdr h2{font-family:'Playfair Display',serif;font-size:1.4rem;color:var(--text)}
+.modal-close{background:none;border:1px solid var(--border);width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;color:var(--muted);transition:all .2s}
+.modal-close:hover{background:#fee;border-color:#fcc;color:#c00}
+.ck-steps{display:flex;margin-bottom:1.5rem}
+.ck-step{flex:1;text-align:center;padding:.55rem;font-size:.78rem;font-weight:600;border-bottom:2px solid var(--border);color:var(--muted)}
+.ck-step.active{border-bottom-color:var(--saffron);color:var(--saffron)}
+.ck-step.done{border-bottom-color:var(--success);color:var(--success)}
+.cart-items{margin-bottom:1.5rem}
+.cart-item{display:flex;align-items:center;justify-content:space-between;padding:.75rem 0;border-bottom:1px solid var(--border)}
+.ci-name{font-weight:500;font-size:.9rem}
+.ci-sub{font-size:.73rem;color:var(--muted)}
+.ci-price{font-weight:700;color:var(--saffron-dark)}
+.ci-rm{background:none;border:none;color:#c00;cursor:pointer;font-size:.9rem;padding:.2rem;margin-left:.5rem}
+.cart-sum{background:var(--cream2);border-radius:12px;padding:1rem;margin-bottom:1.5rem}
+.sum-row{display:flex;justify-content:space-between;padding:.3rem 0;font-size:.85rem}
+.sum-row.total{font-weight:700;font-size:1rem;border-top:1px solid var(--border);padding-top:.75rem;margin-top:.5rem}
+.ck-form{display:flex;flex-direction:column;gap:.75rem}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
+.fg{display:flex;flex-direction:column;gap:.3rem}
+.fg label{font-size:.78rem;font-weight:600;color:var(--text)}
+.fg input,.fg select,.fg textarea{border:1.5px solid var(--border);border-radius:10px;padding:.65rem .9rem;font-size:.88rem;font-family:'DM Sans',sans-serif;color:var(--text);background:var(--white);transition:border-color .2s;outline:none;width:100%}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--saffron)}
+.pay-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem;margin:.5rem 0}
+.pay-btn{border:1.5px solid var(--border);border-radius:10px;padding:.65rem;text-align:center;cursor:pointer;transition:all .2s;font-size:.78rem;font-weight:500;color:var(--text);background:var(--white);font-family:'DM Sans',sans-serif}
+.pay-btn:hover,.pay-btn.active{border-color:var(--saffron);background:rgba(232,135,26,.06);color:var(--saffron-dark)}
+.pay-ico{font-size:1.3rem;display:block;margin-bottom:.2rem}
+.success-sc{text-align:center;padding:2rem 0}
+.success-ico{font-size:4rem;margin-bottom:1rem}
+.success-sc h3{font-family:'Playfair Display',serif;font-size:1.8rem;margin-bottom:.5rem}
+.success-sc p{color:var(--muted);font-size:.9rem}
+.order-num{font-size:.85rem;background:var(--cream2);border-radius:8px;padding:.5rem 1rem;display:inline-block;margin:1rem 0;font-weight:600;color:var(--saffron-dark)}
+.btn-row{display:flex;gap:.75rem;margin-top:1.5rem}
+.btn-row .btn-primary{flex:2;border-radius:12px;padding:1rem;border:none}
+.btn-row .btn-outline{flex:1;border-radius:12px;padding:1rem}
+
+/* ══════════════════════════════════════════
+   FOOTER
+══════════════════════════════════════════ */
+footer{background:var(--deep);color:rgba(253,246,236,.7);padding:3rem}
+.foot-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;max-width:1200px;margin:0 auto}
+.foot-brand .logo{font-size:1.3rem}
+.foot-brand p{margin-top:.75rem;font-size:.83rem;line-height:1.7}
+footer h4{color:var(--saffron);font-size:.8rem;letter-spacing:1px;text-transform:uppercase;margin-bottom:1rem}
+footer ul{list-style:none;display:flex;flex-direction:column;gap:.5rem}
+footer ul li{font-size:.83rem}
+footer ul a{color:rgba(253,246,236,.6);text-decoration:none;transition:color .2s;cursor:pointer}
+footer ul a:hover{color:var(--saffron)}
+.foot-bottom{max-width:1200px;margin:2rem auto 0;padding-top:1.5rem;border-top:1px solid rgba(232,135,26,.15);display:flex;justify-content:space-between;font-size:.78rem}
+
+/* ══════════════════════════════════════════
+   ANIMATIONS & RESPONSIVE
+══════════════════════════════════════════ */
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:900px){
+  nav{padding:1rem 1.5rem}
+  .nav-links{display:none;flex-direction:column;position:absolute;top:70px;left:0;right:0;background:rgba(26,10,0,.99);padding:1.5rem;gap:1rem;border-bottom:1px solid rgba(232,135,26,.2)}
+  .nav-links.open{display:flex}
+  .hamburger{display:flex}
+  .about-grid{grid-template-columns:1fr}
+  .foot-grid{grid-template-columns:1fr 1fr;gap:2rem}
+  .week-picker{grid-template-columns:repeat(4,1fr)}
+  .page-content{padding:2.5rem 1.5rem}
+  .features-strip,.popular-strip,.testi-strip,.cta-band,.team-strip{padding:3.5rem 1.5rem}
+}
+@media(max-width:500px){
+  .hero-stats{gap:1.5rem}
+  .foot-grid{grid-template-columns:1fr}
+  .foot-bottom{flex-direction:column;gap:.5rem}
+  .pay-grid{grid-template-columns:repeat(2,1fr)}
+  .form-row{grid-template-columns:1fr}
+  .week-picker{grid-template-columns:repeat(4,1fr)}
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════ NAV ══════════ -->
+<nav>
+  <span class="logo" onclick="go('home')">Biryani<span>BAoss</span></span>
+  <button class="hamburger" onclick="this.nextElementSibling.classList.toggle('open')">
+    <span></span><span></span><span></span>
+  </button>
+  <ul class="nav-links" id="navlinks">
+    <li><a id="nav-home"   onclick="go('home')"   class="active">Home</a></li>
+    <li><a id="nav-about"  onclick="go('about')">About Us</a></li>
+    <li><a id="nav-menu"   onclick="go('menu')">Menu</a></li>
+    <li><a id="nav-weekly" onclick="go('weekly')">Weekly Schedule</a></li>
+    <li><a id="nav-party"  onclick="go('party')">Party Menu</a></li>
+    <li><a onclick="openCart()" class="nav-cta">Order Now</a></li>
+  </ul>
+</nav>
+
+<!-- ══════════════════════════════════════════
+     PAGE: HOME
+══════════════════════════════════════════ -->
+<div id="page-home" class="page active">
+  <section class="hero">
+    <div class="hero-badge">🇳🇱 Serving the Netherlands</div>
+    <h1 class="hero-title">Authentic<br><span class="accent">Biryani</span><br>Crafted With Love</h1>
+    <p class="hero-sub">From the fragrant streets of Hyderabad to your doorstep — slow-cooked, richly spiced, unforgettable.</p>
+    <div class="hero-btns">
+      <button class="btn-primary" onclick="go('menu')">Explore Menu</button>
+      <button class="btn-dark" onclick="go('weekly')">Weekly Schedule</button>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><div class="stat-num">500+</div><div class="stat-label">Happy Customers</div></div>
+      <div class="stat"><div class="stat-num">15+</div><div class="stat-label">Varieties</div></div>
+      <div class="stat"><div class="stat-num">3</div><div class="stat-label">Cities Served</div></div>
+      <div class="stat"><div class="stat-num">★4.9</div><div class="stat-label">Avg Rating</div></div>
+    </div>
+  </section>
+
+  <section class="features-strip">
+    <div style="max-width:1200px;margin:0 auto">
+      <div class="section-head"><div class="section-label">Why Choose Us</div><h2>The BiriyaniBAoss Difference</h2><p>We don't just cook biryani — we craft an experience</p></div>
+      <div class="feat-grid">
+        <div class="feat-card"><div class="feat-icon">🌿</div><h3>Fresh Ingredients</h3><p>Locally sourced Dutch produce + imported Indian spices for authentic flavour.</p></div>
+        <div class="feat-card"><div class="feat-icon">⏱</div><h3>Slow Dum Cooked</h3><p>Every biryani dum-cooked 3–4 hours for maximum depth and aroma.</p></div>
+        <div class="feat-card"><div class="feat-icon">🚴</div><h3>Fast Delivery</h3><p>Hot & fresh in 35–50 min across Amsterdam, Rotterdam & Den Haag.</p></div>
+        <div class="feat-card"><div class="feat-icon">🎉</div><h3>Party Catering</h3><p>Custom packages for 10 to 500 guests — Bronze to Platinum tiers.</p></div>
+        <div class="feat-card"><div class="feat-icon">📅</div><h3>Weekly Variety</h3><p>New dishes every day. Sunday features our legendary Grand Special.</p></div>
+        <div class="feat-card"><div class="feat-icon">💳</div><h3>Easy Payment</h3><p>iDEAL, Card, PayPal, Apple Pay, Google Pay & Klarna accepted.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="popular-strip">
+    <div style="max-width:1200px;margin:0 auto">
+      <div class="section-head"><div class="section-label">Customer Favourites</div><h2>Most Loved Dishes</h2><p>Try the biryanis our regulars can't stop ordering</p></div>
+      <div class="pop-grid">
+        <div class="pop-card"><div class="pop-img">🍗</div><div class="pop-body"><h3>Hyderabadi Chicken Biryani</h3><p>Slow-cooked dum biryani with tender chicken & whole spices</p><div class="pop-footer"><span class="price">€14.95</span><button class="add-btn" onclick="addItem(1,'Hyderabadi Chicken Biryani','Biryani',14.95)">+</button></div></div></div>
+        <div class="pop-card"><div class="pop-img">🐑</div><div class="pop-body"><h3>Mutton Biryani</h3><p>Tender slow-cooked mutton with aged basmati rice</p><div class="pop-footer"><span class="price">€16.95</span><button class="add-btn" onclick="addItem(2,'Mutton Biryani','Biryani',16.95)">+</button></div></div></div>
+        <div class="pop-card"><div class="pop-img">🦐</div><div class="pop-body"><h3>Prawn Biryani</h3><p>Coastal style prawn biryani with coconut & curry leaves</p><div class="pop-footer"><span class="price">€17.95</span><button class="add-btn" onclick="addItem(4,'Prawn Biryani','Biryani',17.95)">+</button></div></div></div>
+        <div class="pop-card"><div class="pop-img">🧀</div><div class="pop-body"><h3>Paneer Biryani</h3><p>Luxurious paneer biryani with saffron & rose water</p><div class="pop-footer"><span class="price">€13.95</span><button class="add-btn" onclick="addItem(6,'Paneer Biryani','Biryani',13.95)">+</button></div></div></div>
+      </div>
+      <div style="text-align:center"><button class="btn-primary" onclick="go('menu')">View Full Menu →</button></div>
+    </div>
+  </section>
+
+  <section class="testi-strip">
+    <div style="max-width:1200px;margin:0 auto">
+      <div class="section-head"><div class="section-label">Reviews</div><h2>What Our Customers Say</h2><p>Real reviews from biryani lovers across the Netherlands</p></div>
+      <div class="testi-grid">
+        <div class="testi-card"><div class="stars">★★★★★</div><blockquote>"The Hyderabadi Chicken Biryani is the best I've had outside India. Authentic flavours, generous portions, arrived piping hot!"</blockquote><div class="testi-meta"><div class="testi-av">PK</div><div><div class="testi-name">Priya K.</div><div class="testi-city">Amsterdam</div></div></div></div>
+        <div class="testi-card"><div class="stars">★★★★★</div><blockquote>"Ordered the Sunday Grand Special — the Royal Dum Biryani was outstanding. Will be back every Sunday!"</blockquote><div class="testi-meta"><div class="testi-av">MV</div><div><div class="testi-name">Martijn V.</div><div class="testi-city">Rotterdam</div></div></div></div>
+        <div class="testi-card"><div class="stars">★★★★★</div><blockquote>"Used the Gold party package for my wedding — 120 guests, everyone loved it. Seamless service, amazing food!"</blockquote><div class="testi-meta"><div class="testi-av">AS</div><div><div class="testi-name">Aisha S.</div><div class="testi-city">Den Haag</div></div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-band">
+    <h2>Ready to Order?</h2>
+    <p>Fresh biryani, just a few clicks away. Delivered hot to your door.</p>
+    <div class="cta-btns">
+      <button class="btn-primary" onclick="go('menu')">Order Now</button>
+      <button class="btn-dark" onclick="go('party')">Plan a Party</button>
+    </div>
+  </section>
+  <div id="footer-home"></div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     PAGE: ABOUT
+══════════════════════════════════════════ -->
+<div id="page-about" class="page">
+  <div class="page-hero"><h1>Our Story</h1><p>From a family kitchen to your favourite biryani destination</p></div>
+  <div class="page-content">
+    <div class="about-grid">
+      <div class="about-visual">
+        <span class="about-emoji">🍲</span>
+        <h3>Est. 2019 · Amsterdam</h3>
+        <p>Born from a passion for authentic South Indian cuisine in the Netherlands</p>
+      </div>
+      <div class="about-text">
+        <div class="section-label">Our Journey</div>
+        <h2>More Than Just <span>Biryani</span></h2>
+        <p>BiriyaniBAoss started as a small home kitchen experiment in Amsterdam, driven by a craving for authentic Hyderabadi biryani we couldn't find in the Netherlands. What began as cooking for friends quickly became a beloved community fixture.</p>
+        <p>Every grain of rice, every whole spice, and every slow-cooked pot is a tribute to generations of culinary tradition. We source premium basmati rice from India, whole spices from specialty importers, and fresh local produce from Dutch markets.</p>
+        <p>Today we serve thousands of customers across Amsterdam, Rotterdam, and Den Haag — delivering soul food that bridges cultures and brings people together.</p>
+        <button class="btn-primary" style="margin-top:1.5rem" onclick="go('menu')">Explore Our Menu</button>
+      </div>
+    </div>
+    <div class="section-head" style="margin-top:1rem"><div class="section-label">What We Stand For</div><h2>Our Core Values</h2><p>The principles behind every dish we make</p></div>
+    <div class="vals-grid">
+      <div class="val-card"><div class="val-icon">🌿</div><h4>Fresh Ingredients</h4><p>Locally sourced Dutch produce combined with imported Indian spices for authentic, vibrant flavour.</p></div>
+      <div class="val-card"><div class="val-icon">⏱</div><h4>Slow Cooked</h4><p>Every biryani is dum-cooked for 3–4 hours. No shortcuts, ever.</p></div>
+      <div class="val-card"><div class="val-icon">❤️</div><h4>Made With Love</h4><p>Family recipes passed through generations, prepared fresh daily with pride.</p></div>
+      <div class="val-card"><div class="val-icon">🚴</div><h4>Fast Delivery</h4><p>Hot and fresh to your door across three Dutch cities within 50 minutes.</p></div>
+      <div class="val-card"><div class="val-icon">🌱</div><h4>Vegetarian Friendly</h4><p>Extensive vegetarian options without compromising on taste or tradition.</p></div>
+      <div class="val-card"><div class="val-icon">🎉</div><h4>Party Catering</h4><p>Customised packages for events from 10 to 500 guests — Bronze to Platinum.</p></div>
+    </div>
+  </div>
+  <section class="team-strip">
+    <div style="max-width:1200px;margin:0 auto">
+      <div class="section-head"><div class="section-label">The People</div><h2>Meet the Team</h2></div>
+      <div class="team-grid">
+        <div class="team-card"><div class="team-av">👨‍🍳</div><h3>Rajan Kumar</h3><p>Head Chef & Founder<br><span style="color:var(--saffron);font-size:.75rem">20 years culinary experience</span></p></div>
+        <div class="team-card"><div class="team-av">👩‍🍳</div><h3>Lakshmi Rajan</h3><p>Co-Founder & Recipe Director<br><span style="color:var(--saffron);font-size:.75rem">Family recipe custodian</span></p></div>
+        <div class="team-card"><div class="team-av">👨‍💼</div><h3>Arjun Patel</h3><p>Operations Manager<br><span style="color:var(--saffron);font-size:.75rem">Logistics & delivery</span></p></div>
+        <div class="team-card"><div class="team-av">👩‍💼</div><h3>Nadia Bakker</h3><p>Customer Experience<br><span style="color:var(--saffron);font-size:.75rem">Your point of contact</span></p></div>
+      </div>
+    </div>
+  </section>
+  <div style="padding:5rem 3rem;background:var(--cream)">
+    <div class="tl-wrap">
+      <div class="section-head"><div class="section-label">Our History</div><h2>How We Grew</h2></div>
+      <div class="tl-list">
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-year">2019</div><h4>The First Pot</h4><p>Rajan cooks his mother's Hyderabadi dum biryani for 20 friends in Amsterdam. They demand seconds — and thirds.</p></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-year">2020</div><h4>Going Online</h4><p>Launched our first ordering channel via WhatsApp. 50 orders in the first week. A brand is born.</p></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-year">2021</div><h4>First Commercial Kitchen</h4><p>Moved into a professional kitchen in Amsterdam-Oost and expanded to Rotterdam deliveries.</p></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-year">2022</div><h4>Sunday Grand Special Debut</h4><p>Launched our legendary Sunday-only menu with the Royal Dum Biryani. Sold out every week since.</p></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-year">2023</div><h4>Party Catering Launch</h4><p>Introduced Bronze–Platinum packages. Catered 80+ events including weddings and corporate dinners.</p></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-year">2025</div><h4>Den Haag Expansion</h4><p>Now serving all three major Dutch cities. 500+ happy customers and growing every week.</p></div>
+      </div>
+    </div>
+  </div>
+  <div id="footer-about"></div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     PAGE: MENU
+══════════════════════════════════════════ -->
+<div id="page-menu" class="page">
+  <div class="page-hero"><h1>Our Menu</h1><p>Handcrafted biryanis, curries, starters, desserts & drinks</p></div>
+  <div class="page-content">
+    <div class="cat-bar">
+      <button class="cat-btn active" onclick="filterCat('all',this)">All</button>
+      <button class="cat-btn" onclick="filterCat('biryani',this)">🍚 Biryani</button>
+      <button class="cat-btn" onclick="filterCat('curry',this)">🍛 Curries</button>
+      <button class="cat-btn" onclick="filterCat('starter',this)">🍢 Starters</button>
+      <button class="cat-btn" onclick="filterCat('dessert',this)">🍮 Desserts</button>
+      <button class="cat-btn" onclick="filterCat('drink',this)">🥛 Drinks</button>
+    </div>
+    <div class="menu-grid" id="menu-grid"></div>
+  </div>
+  <div id="footer-menu"></div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     PAGE: WEEKLY SCHEDULE
+══════════════════════════════════════════ -->
+<div id="page-weekly" class="page">
+  <div class="page-hero"><h1>Weekly Schedule</h1><p>A new variety every day — including our famous Sunday Grand Special</p></div>
+  <div class="page-content">
+    <div class="section-head"><div class="section-label">Pick Your Date</div><h2>What's Cooking This Week?</h2><p>Select a day to see the menu. Sunday features our exclusive Grand Special.</p></div>
+    <div class="week-picker" id="week-picker"></div>
+    <div class="daily-box" id="daily-box"></div>
+  </div>
+  <div id="footer-weekly"></div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     PAGE: PARTY MENU
+══════════════════════════════════════════ -->
+<div id="page-party" class="page">
+  <div class="page-hero"><h1>Party Menu</h1><p>Celebrate every occasion with BiriyaniBAoss catering packages</p></div>
+  <div class="page-content">
+    <div class="section-head"><div class="section-label">Choose Your Package</div><h2>Packages for Every Occasion</h2><p>From intimate gatherings to grand celebrations — Bronze to Platinum tiers.</p></div>
+    <div class="party-grid" id="party-grid"></div>
+    <div style="background:var(--cream2);border-radius:20px;padding:2.5rem;margin-top:3rem;text-align:center">
+      <div style="font-size:2rem;margin-bottom:.75rem">📞</div>
+      <h3 style="font-family:'Playfair Display',serif;font-size:1.5rem;margin-bottom:.5rem">Need a Custom Quote?</h3>
+      <p style="color:var(--muted);margin-bottom:1.5rem">For events over 200 guests or fully custom menus, contact us directly.</p>
+      <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap">
+        <a class="btn-primary" href="tel:+31201234567">📞 Call Us</a>
+        <a class="btn-outline" href="mailto:info@biriyaniboss.nl">✉️ Email Us</a>
+      </div>
+    </div>
+  </div>
+  <div id="footer-party"></div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     CART BAR
+══════════════════════════════════════════ -->
+<div class="cart-bar hidden" id="cart-bar" onclick="openCart()">
+  <span>🛒 Cart</span>
+  <div class="cart-count" id="cart-count">0</div>
+  <span class="cart-total" id="cart-total-bar">€0.00</span>
+  <span style="font-size:.82rem;color:rgba(253,246,236,.55)">Checkout →</span>
+</div>
+
+<!-- ══════════════════════════════════════════
+     CART MODAL
+══════════════════════════════════════════ -->
+<div class="modal-overlay" id="cart-modal" onclick="if(event.target===this)closeCart()">
+  <div class="modal">
+    <div class="modal-hdr">
+      <h2 id="modal-title">Your Cart</h2>
+      <button class="modal-close" onclick="closeCart()">✕</button>
+    </div>
+    <div id="modal-body"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     FOOTER TEMPLATE (injected by JS)
+══════════════════════════════════════════ -->
+<template id="footer-tpl">
+  <footer>
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <span class="logo" onclick="go('home')" style="cursor:pointer">Biryani<span>BAoss</span></span>
+        <p>Authentic South Indian biryani delivered fresh across the Netherlands. Amsterdam · Rotterdam · Den Haag.</p>
+      </div>
+      <div><h4>Pages</h4><ul>
+        <li><a onclick="go('home')">Home</a></li>
+        <li><a onclick="go('about')">About Us</a></li>
+        <li><a onclick="go('menu')">Menu</a></li>
+        <li><a onclick="go('weekly')">Weekly Schedule</a></li>
+        <li><a onclick="go('party')">Party Menu</a></li>
+      </ul></div>
+      <div><h4>Contact</h4><ul>
+        <li>📍 Amsterdam, NL</li>
+        <li>📞 +31 20 123 4567</li>
+        <li>✉️ info@biriyaniboss.nl</li>
+        <li>⏰ Mon–Sat: 11am–10pm</li>
+        <li>⏰ Sunday: 10am–11pm</li>
+      </ul></div>
+      <div><h4>We Accept</h4><ul>
+        <li>💳 iDEAL</li><li>💳 Credit Card</li>
+        <li>💳 PayPal</li><li>💳 Apple Pay</li><li>💳 Google Pay</li>
+      </ul></div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2025 BiriyaniBAoss Netherlands. All rights reserved.</span>
+      <span>KVK: 87654321 · VAT: NL123456789B01</span>
+    </div>
+  </footer>
+</template>
+
+<script>
+/* ════════════════════════════════════════
+   DATA
+════════════════════════════════════════ */
+const MENU = [
+  {id:1, cat:'biryani', name:'Hyderabadi Chicken Biryani', desc:'Slow-cooked dum biryani with tender chicken & whole spices', price:14.95, spice:'medium', emoji:'🍗'},
+  {id:2, cat:'biryani', name:'Mutton Biryani', desc:'Tender slow-cooked mutton with aged basmati rice', price:16.95, spice:'hot', emoji:'🐑'},
+  {id:3, cat:'biryani', name:'Vegetable Biryani', desc:'Fragrant biryani with seasonal vegetables', price:11.95, spice:'mild', emoji:'🥕'},
+  {id:4, cat:'biryani', name:'Prawn Biryani', desc:'Coastal style prawn biryani with coconut & curry leaves', price:17.95, spice:'medium', emoji:'🦐'},
+  {id:5, cat:'biryani', name:'Egg Biryani', desc:'Classic egg biryani with crispy fried eggs & caramelised onion', price:10.95, spice:'mild', emoji:'🥚'},
+  {id:6, cat:'biryani', name:'Paneer Biryani', desc:'Luxurious paneer biryani with saffron & rose water', price:13.95, spice:'mild', emoji:'🧀'},
+  {id:7, cat:'curry', name:'Butter Chicken Masala', desc:'Creamy tomato-based curry with tender chicken', price:12.95, spice:'mild', emoji:'🍛'},
+  {id:8, cat:'curry', name:'Dal Makhani', desc:'Slow-cooked black lentils in rich buttery gravy', price:9.95, spice:'mild', emoji:'🫘'},
+  {id:9, cat:'curry', name:'Chicken Chettinad', desc:'Fiery South Indian curry with freshly ground spices', price:13.95, spice:'hot', emoji:'🌶️'},
+  {id:10, cat:'curry', name:'Palak Paneer', desc:'Cottage cheese in silky spiced spinach gravy', price:11.95, spice:'mild', emoji:'🥬'},
+  {id:11, cat:'starter', name:'Chicken 65', desc:'Crispy deep-fried chicken with curry leaves & chillis', price:8.95, spice:'hot', emoji:'🍗'},
+  {id:12, cat:'starter', name:'Samosa (4 pcs)', desc:'Crispy pastry filled with spiced potatoes & peas', price:5.95, spice:'mild', emoji:'🥟'},
+  {id:13, cat:'starter', name:'Onion Bhaji', desc:'Crispy golden onion fritters with mint chutney', price:5.95, spice:'mild', emoji:'🧅'},
+  {id:14, cat:'starter', name:'Seekh Kebab', desc:'Spiced minced lamb skewers grilled in tandoor', price:9.95, spice:'medium', emoji:'🍢'},
+  {id:15, cat:'dessert', name:'Gulab Jamun', desc:'Soft milk dumplings in rose-flavored sugar syrup', price:4.95, spice:null, emoji:'🍮'},
+  {id:16, cat:'dessert', name:'Mango Kulfi', desc:'Traditional Indian ice cream with Alphonso mango', price:4.95, spice:null, emoji:'🥭'},
+  {id:17, cat:'dessert', name:'Kheer', desc:'Creamy rice pudding with cardamom & saffron', price:3.95, spice:null, emoji:'🍚'},
+  {id:18, cat:'drink', name:'Mango Lassi', desc:'Refreshing yogurt-based mango drink', price:3.95, spice:null, emoji:'🥛'},
+  {id:19, cat:'drink', name:'Masala Chai', desc:'Spiced Indian tea with cardamom & ginger', price:2.95, spice:null, emoji:'☕'},
+  {id:20, cat:'drink', name:'Rose Sharbat', desc:'Chilled rose-flavored drink — perfect with biryani', price:2.95, spice:null, emoji:'🌹'},
+];
+
+const WEEK = [
+  {day:'Mon', theme:'Chicken Day',        emoji:'🍗', items:[
+    {name:'Hyderabadi Chicken Biryani', desc:'Classic slow-cooked dum biryani', price:14.95},
+    {name:'Chicken 65',                 desc:'Crispy spiced starter',           price:8.95},
+    {name:'Butter Chicken Masala',      desc:'Creamy tomato curry',             price:12.95},
+  ]},
+  {day:'Tue', theme:'Vegetarian Day',     emoji:'🥦', items:[
+    {name:'Paneer Biryani',    desc:'Saffron-infused paneer biryani', price:13.95},
+    {name:'Dal Makhani',       desc:'Slow-cooked black lentils',      price:9.95},
+    {name:'Vegetable Biryani', desc:'Seasonal veggie biryani',        price:11.95},
+  ]},
+  {day:'Wed', theme:'Mutton Special',     emoji:'🐑', items:[
+    {name:'Mutton Biryani', desc:'Tender slow-cooked mutton',    price:16.95},
+    {name:'Mutton Korma',   desc:'Rich Mughal-style curry',      price:15.95},
+    {name:'Keema Rice',     desc:'Spiced minced mutton rice',    price:13.95},
+  ]},
+  {day:'Thu', theme:'Seafood Day',        emoji:'🦐', items:[
+    {name:'Prawn Biryani', desc:'Coastal style with coconut', price:17.95},
+    {name:'Fish Curry',    desc:'Tangy Kerala fish curry',    price:13.95},
+    {name:'Prawn Masala',  desc:'Spicy prawn stir-fry',      price:14.95},
+  ]},
+  {day:'Fri', theme:'Family Feast',       emoji:'👨‍👩‍👧', items:[
+    {name:'Mixed Biryani Platter', desc:'Chicken + Veg combo',             price:13.95},
+    {name:'Egg Biryani',           desc:'Classic egg dum biryani',         price:10.95},
+    {name:'Raita & Papad',         desc:'Sides & accompaniments',          price:3.95},
+  ]},
+  {day:'Sat', theme:'Street Food Day',    emoji:'🛵', items:[
+    {name:'Biryani Bowl',  desc:'Mini biryani in a bowl',           price:9.95},
+    {name:'Samosa Chaat',  desc:'Crispy samosa with chaat toppings',price:7.95},
+    {name:'Pav Bhaji',     desc:'Spiced vegetable mash with bread', price:8.95},
+  ]},
+  {day:'Sun', theme:'🌟 SUNDAY GRAND SPECIAL 🌟', emoji:'👑', isSunday:true, items:[
+    {name:'Royal Dum Biryani',      desc:'Saffron, kewra & golden onions — our signature showstopper', price:19.95},
+    {name:'Nihari Gosht',           desc:'Slow-cooked shank curry over 8 hours',                       price:18.95},
+    {name:'Shahi Paneer Biryani',   desc:'Paneer in royal gravy dum-cooked with aged basmati',        price:15.95},
+    {name:'Haleem',                 desc:'Slow-cooked wheat & mutton porridge — once a week only',     price:14.95},
+    {name:'Phirni Dessert',         desc:'Chilled rice pudding with saffron & pistachios',            price:5.95},
+  ]},
+];
+
+const TIERS = [
+  {key:'bronze', label:'Bronze', emoji:'🥉', price:'€18', unit:'/person', min:10,
+   desc:'Perfect for small gatherings & office parties',
+   feats:['1 Biryani variety','Raita & Papad','Mineral water','Disposable crockery','Serves 10–30 guests','Self pickup or delivery*']},
+  {key:'silver', label:'Silver', emoji:'🥈', price:'€26', unit:'/person', min:25,
+   desc:'Great for birthday parties & small weddings',
+   feats:['2 Biryani varieties','1 Curry dish','Raita, Papad & Salad','Soft drinks included','Quality crockery','Serves 25–75 guests','Delivery included']},
+  {key:'gold',   label:'Gold',   emoji:'🏆', price:'€38', unit:'/person', min:50,
+   desc:'Ideal for weddings, corporate events & big parties',
+   feats:['3 Biryani varieties','2 Curry dishes','Starter platter','Dessert included','Premium crockery & cutlery','Serving staff 4 hours','Serves 50–200 guests','Free delivery + setup']},
+  {key:'platinum',label:'Platinum',emoji:'💎',price:'€55',unit:'/person', min:100,
+   desc:'Grand celebrations — weddings, galas & premieres',
+   feats:['Unlimited Biryani varieties','Full curry buffet','Live cooking station','Starter + Dessert buffet','Fine dining crockery','Dedicated serving team 8 hrs','Event coordinator assigned','Serves 100–500 guests','Custom menu consultation','Free delivery, setup & cleanup']},
+];
+
+/* ════════════════════════════════════════
+   ROUTING
+════════════════════════════════════════ */
+const PAGES = ['home','about','menu','weekly','party'];
+let currentPage = 'home';
+
+function go(page) {
+  if (!PAGES.includes(page)) return;
+  // hide all
+  PAGES.forEach(p => document.getElementById('page-'+p).classList.remove('active'));
+  // show target
+  document.getElementById('page-'+page).classList.add('active');
+  currentPage = page;
+  // nav highlight
+  document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+  const navEl = document.getElementById('nav-'+page);
+  if (navEl) navEl.classList.add('active');
+  // close hamburger
+  document.getElementById('navlinks').classList.remove('open');
+  // scroll top
+  window.scrollTo({top:0, behavior:'instant'});
+  // init page
+  if (page === 'menu')   renderMenu('all');
+  if (page === 'weekly') renderWeekly();
+  if (page === 'party')  renderParty();
+}
+
+/* ════════════════════════════════════════
+   FOOTER INJECTION
+════════════════════════════════════════ */
+function injectFooters() {
+  const tpl = document.getElementById('footer-tpl').innerHTML;
+  ['home','about','menu','weekly','party'].forEach(p => {
+    const el = document.getElementById('footer-'+p);
+    if (el) el.innerHTML = tpl;
+  });
+}
+
+/* ════════════════════════════════════════
+   MENU PAGE
+════════════════════════════════════════ */
+let currentCat = 'all';
+function filterCat(cat, btn) {
+  currentCat = cat;
+  document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderMenu(cat);
+}
+function renderMenu(cat) {
+  const items = cat === 'all' ? MENU : MENU.filter(i => i.cat === cat);
+  document.getElementById('menu-grid').innerHTML = items.map(item => `
+    <div class="menu-card">
+      <div class="menu-img">${item.emoji}</div>
+      <div class="menu-body">
+        <h3>${item.name}</h3>
+        <p>${item.desc}</p>
+        ${item.spice ? `<span class="badge-spice ${item.spice}">${item.spice==='mild'?'🌿 Mild':item.spice==='medium'?'🌶 Medium':'🔥 Hot'}</span>` : ''}
+        <div class="menu-footer">
+          <span class="price">€${item.price.toFixed(2)}</span>
+          <button class="add-btn" onclick="addItem(${item.id},'${item.name.replace(/'/g,"\\'")}','${item.cat}',${item.price})">+</button>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+/* ════════════════════════════════════════
+   WEEKLY PAGE
+════════════════════════════════════════ */
+let selDay = new Date().getDay(); // 0=Sun … 6=Sat
+
+function renderWeekly() {
+  const today = new Date();
+  const todayDow = today.getDay();
+  const picker = document.getElementById('week-picker');
+  picker.innerHTML = WEEK.map((d, i) => {
+    // i=0 Mon … i=6 Sun → day-of-week: 1…6,0
+    const dow = i < 6 ? i + 1 : 0;
+    const diff = dow - todayDow;
+    const date = new Date(today);
+    date.setDate(today.getDate() + diff);
+    const dom = date.getDate();
+    const isSun = i === 6;
+    const isSel = selDay === dow;
+    return `
+      <div class="day-card${isSun?' sun-card':''}${isSel?' sel':''}" onclick="selectDay(${dow})">
+        ${isSun ? '<span class="sun-badge">★</span>' : ''}
+        <div class="day-lbl">${d.day}</div>
+        <div class="day-num">${dom}</div>
+        <div class="day-tag">${isSun ? 'Special' : d.theme.split(' ')[0]}</div>
+      </div>`;
+  }).join('');
+  renderDaily();
+}
+
+function selectDay(dow) {
+  selDay = dow;
+  renderWeekly();
+}
+
+function renderDaily() {
+  // map selDay (0=Sun…6=Sat) → WEEK index (0=Mon…6=Sun)
+  const idx = selDay === 0 ? 6 : selDay - 1;
+  const d = WEEK[idx];
+  const box = document.getElementById('daily-box');
+  box.innerHTML = `
+    <div class="daily-head">
+      <div class="daily-icon">${d.emoji}</div>
+      <div>
+        <h3>${d.theme}</h3>
+        <p>${d.isSunday ? '⚠️ Limited quantities — order early!' : 'Available all day · Order by 9 pm'}</p>
+      </div>
+    </div>
+    ${d.isSunday ? `
+    <div class="sun-banner">
+      <div style="font-size:2rem">👑</div>
+      <div>
+        <h4>Sunday Grand Special</h4>
+        <p>Our most anticipated menu — exclusive recipes only available on Sundays. Limited servings.</p>
+      </div>
+    </div>` : ''}
+    <div class="daily-items">
+      ${d.items.map((item, j) => `
+        <div class="daily-item" id="di-${idx}-${j}">
+          <h4>${item.name}</h4>
+          <p>${item.desc}</p>
+          <div class="item-row">
+            <span class="price">€${item.price.toFixed(2)}</span>
+            <button class="add-btn" onclick="addWeeklyItem('${item.name.replace(/'/g,"\\'")}',${item.price},${idx},${j})">+</button>
+          </div>
+        </div>`).join('')}
+    </div>`;
+}
+
+function addWeeklyItem(name, price, dayIdx, j) {
+  const el = document.getElementById(`di-${dayIdx}-${j}`);
+  if (el) el.classList.add('picked');
+  addItem('w'+dayIdx+'_'+j, name, WEEK[dayIdx].day+' special', price);
+}
+
+/* ════════════════════════════════════════
+   PARTY PAGE
+════════════════════════════════════════ */
+function renderParty() {
+  document.getElementById('party-grid').innerHTML = TIERS.map(t => `
+    <div class="tier-card t-${t.key}" id="tier-${t.key}" onclick="selectTier('${t.key}')">
+      <div class="tier-ico">${t.emoji}</div>
+      <div class="tier-name">${t.label}</div>
+      <div class="tier-price">${t.price}<span style="font-size:.9rem;font-weight:400">${t.unit}</span></div>
+      <div class="tier-desc">Min. ${t.min} guests · ${t.desc}</div>
+      <ul class="tier-feats">${t.feats.map(f=>`<li>${f}</li>`).join('')}</ul>
+      <button class="tier-btn" onclick="bookTier('${t.key}',event)">Book ${t.label} Package →</button>
+    </div>`).join('');
+}
+
+function selectTier(key) {
+  document.querySelectorAll('.tier-card').forEach(c => c.classList.remove('sel-tier'));
+  document.getElementById('tier-'+key).classList.add('sel-tier');
+}
+
+function bookTier(key, e) {
+  e.stopPropagation();
+  const t = TIERS.find(x => x.key === key);
+  addItem('party-'+key, t.label+' Party Package', 'Min. '+t.min+' guests — price on confirmation', 0);
+  openCart();
+}
+
+/* ════════════════════════════════════════
+   CART
+════════════════════════════════════════ */
+let cart = [];
+let ckStep = 1;
+let selPay = 'ideal';
+
+function addItem(id, name, sub, price) {
+  id = String(id);
+  const ex = cart.find(c => c.id === id);
+  if (ex) { ex.qty++; } else { cart.push({id, name, sub, price, qty:1}); }
+  syncCartBar();
+  flashBar();
+}
+
+function removeItem(id) {
+  cart = cart.filter(c => c.id !== String(id));
+  syncCartBar();
+  renderModal();
+}
+
+function syncCartBar() {
+  const bar = document.getElementById('cart-bar');
+  const count = cart.reduce((s,c) => s+c.qty, 0);
+  const total = cart.reduce((s,c) => s+c.price*c.qty, 0);
+  document.getElementById('cart-count').textContent = count;
+  document.getElementById('cart-total-bar').textContent = `€${total.toFixed(2)}`;
+  bar.classList.toggle('hidden', count === 0);
+}
+
+function flashBar() {
+  const bar = document.getElementById('cart-bar');
+  bar.style.transform = 'scale(1.06)';
+  setTimeout(() => bar.style.transform = '', 200);
+}
+
+function openCart() { ckStep=1; document.getElementById('cart-modal').classList.add('open'); renderModal(); }
+function closeCart() { document.getElementById('cart-modal').classList.remove('open'); }
+
+function renderModal() {
+  const body  = document.getElementById('modal-body');
+  const title = document.getElementById('modal-title');
+  const sub   = cart.reduce((s,c) => s+c.price*c.qty, 0);
+  const del   = sub > 30 ? 0 : (cart.length ? 2.95 : 0);
+  const total = sub + del;
+
+  if (cart.length === 0) {
+    title.textContent = 'Your Cart';
+    body.innerHTML = `<div style="text-align:center;padding:2rem;color:var(--muted)">
+      <div style="font-size:3rem;margin-bottom:1rem">🛒</div>
+      <p style="margin-bottom:1rem">Your cart is empty.</p>
+      <button class="btn-primary" onclick="closeCart();go('menu')">Browse Menu</button>
+    </div>`;
+    return;
+  }
+
+  if (ckStep === 1) {
+    title.textContent = 'Your Cart';
+    body.innerHTML = `
+      <div class="ck-steps"><div class="ck-step active">1 Cart</div><div class="ck-step">2 Details</div><div class="ck-step">3 Payment</div></div>
+      <div class="cart-items">
+        ${cart.map(c=>`
+          <div class="cart-item">
+            <div><div class="ci-name">${c.name}${c.qty>1?' ×'+c.qty:''}</div><div class="ci-sub">${c.sub}</div></div>
+            <div style="display:flex;align-items:center">
+              <div class="ci-price">€${(c.price*c.qty).toFixed(2)}</div>
+              <button class="ci-rm" onclick="removeItem('${c.id}')">✕</button>
+            </div>
+          </div>`).join('')}
+      </div>
+      <div class="cart-sum">
+        <div class="sum-row"><span>Subtotal</span><span>€${sub.toFixed(2)}</span></div>
+        <div class="sum-row"><span>Delivery</span><span>${del===0?'<span style="color:var(--success)">FREE</span>':'€'+del.toFixed(2)}</span></div>
+        ${del>0?'<div class="sum-row" style="font-size:.73rem;color:var(--muted)"><span>Free delivery over €30</span></div>':''}
+        <div class="sum-row total"><span>Total</span><span>€${total.toFixed(2)}</span></div>
+      </div>
+      <button class="btn-primary" style="width:100%;border-radius:12px;padding:1rem;border:none" onclick="ckStep=2;renderModal()">Proceed to Details →</button>`;
+
+  } else if (ckStep === 2) {
+    title.textContent = 'Delivery Details';
+    body.innerHTML = `
+      <div class="ck-steps"><div class="ck-step done">✓ Cart</div><div class="ck-step active">2 Details</div><div class="ck-step">3 Payment</div></div>
+      <div class="ck-form">
+        <div class="form-row">
+          <div class="fg"><label>First Name</label><input placeholder="Jan"></div>
+          <div class="fg"><label>Last Name</label><input placeholder="de Vries"></div>
+        </div>
+        <div class="fg"><label>Email</label><input type="email" placeholder="jan@example.nl"></div>
+        <div class="fg"><label>Phone</label><input type="tel" placeholder="+31 6 1234 5678"></div>
+        <div class="fg"><label>Delivery Address</label><input placeholder="Damrak 123, Amsterdam"></div>
+        <div class="form-row">
+          <div class="fg"><label>Postal Code</label><input placeholder="1012 AB"></div>
+          <div class="fg"><label>City</label><select><option>Amsterdam</option><option>Rotterdam</option><option>Den Haag</option></select></div>
+        </div>
+        <div class="fg"><label>Delivery Notes (optional)</label><textarea rows="2" placeholder="Ring bell, leave at door…" style="resize:none"></textarea></div>
+      </div>
+      <div class="btn-row" style="margin-top:1.5rem">
+        <button class="btn-outline" onclick="ckStep=1;renderModal()">← Back</button>
+        <button class="btn-primary" style="border:none" onclick="ckStep=3;renderModal()">Continue to Payment →</button>
+      </div>`;
+
+  } else if (ckStep === 3) {
+    title.textContent = 'Payment';
+    const cardFields = selPay==='card' ? `
+      <div class="ck-form" style="margin-top:1rem">
+        <div class="fg"><label>Card Number</label><input placeholder="1234 5678 9012 3456" maxlength="19"></div>
+        <div class="form-row">
+          <div class="fg"><label>Expiry</label><input placeholder="MM/YY" maxlength="5"></div>
+          <div class="fg"><label>CVV</label><input placeholder="123" maxlength="4"></div>
+        </div>
+        <div class="fg"><label>Cardholder Name</label><input placeholder="Jan de Vries"></div>
+      </div>` :
+      `<div style="background:var(--cream2);border-radius:12px;padding:1rem;margin-top:1rem;text-align:center;color:var(--muted);font-size:.85rem">
+        You'll be redirected to <strong>${selPay==='ideal'?'your bank via iDEAL':selPay==='paypal'?'PayPal':selPay==='apple'?'Apple Pay':selPay==='google'?'Google Pay':'Klarna'}</strong> to complete payment securely.
+      </div>`;
+    body.innerHTML = `
+      <div class="ck-steps"><div class="ck-step done">✓ Cart</div><div class="ck-step done">✓ Details</div><div class="ck-step active">3 Payment</div></div>
+      <div class="cart-sum" style="margin-bottom:1.5rem">
+        <div class="sum-row total"><span>Total to Pay</span><span>€${total.toFixed(2)}</span></div>
+      </div>
+      <p style="font-size:.85rem;font-weight:600;margin-bottom:.75rem">Choose Payment Method</p>
+      <div class="pay-grid">
+        <button class="pay-btn${selPay==='ideal'?' active':''}" onclick="selPay='ideal';renderModal()"><span class="pay-ico">🏦</span>iDEAL</button>
+        <button class="pay-btn${selPay==='card'?' active':''}" onclick="selPay='card';renderModal()"><span class="pay-ico">💳</span>Card</button>
+        <button class="pay-btn${selPay==='paypal'?' active':''}" onclick="selPay='paypal';renderModal()"><span class="pay-ico">🅿</span>PayPal</button>
+        <button class="pay-btn${selPay==='apple'?' active':''}" onclick="selPay='apple';renderModal()"><span class="pay-ico">🍎</span>Apple Pay</button>
+        <button class="pay-btn${selPay==='google'?' active':''}" onclick="selPay='google';renderModal()"><span class="pay-ico">G</span>Google Pay</button>
+        <button class="pay-btn${selPay==='klarna'?' active':''}" onclick="selPay='klarna';renderModal()"><span class="pay-ico">🛍</span>Klarna</button>
+      </div>
+      ${cardFields}
+      <div class="btn-row">
+        <button class="btn-outline" onclick="ckStep=2;renderModal()">← Back</button>
+        <button class="btn-primary" style="border:none;background:var(--success)" onclick="placeOrder()">🔒 Pay €${total.toFixed(2)}</button>
+      </div>
+      <p style="text-align:center;font-size:.73rem;color:var(--muted);margin-top:.75rem">🔒 Secured by Stripe · SSL encrypted</p>`;
+
+  } else if (ckStep === 4) {
+    const num = 'BB-' + Math.random().toString(36).substring(2,8).toUpperCase();
+    title.textContent = 'Order Confirmed! 🎉';
+    cart = [];
+    syncCartBar();
+    body.innerHTML = `
+      <div class="success-sc">
+        <div class="success-ico">🎉</div>
+        <h3>Thank You!</h3>
+        <p>Your biryani is being lovingly prepared.</p>
+        <div class="order-num">Order #${num}</div>
+        <p style="margin-top:.5rem">Estimated delivery: <strong>35–50 minutes</strong></p>
+        <p style="font-size:.78rem;color:var(--muted);margin-top:.4rem">A confirmation email is on its way.</p>
+        <button class="btn-primary" style="margin-top:1.5rem;border:none;border-radius:12px" onclick="closeCart()">Continue Browsing</button>
+      </div>`;
+  }
+}
+
+function placeOrder() { ckStep=4; renderModal(); }
+
+/* ════════════════════════════════════════
+   INIT
+════════════════════════════════════════ */
+document.addEventListener('DOMContentLoaded', () => {
+  injectFooters();
+  renderMenu('all');
+  renderWeekly();
+  renderParty();
+});
+</script>
+</body>
+</html>
